@@ -1,9 +1,12 @@
 package org.myola.demo.jpa.config;
 
 import java.sql.SQLException;
+import javax.sql.DataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 
 /**
  *
@@ -12,6 +15,15 @@ import org.springframework.context.annotation.DependsOn;
 @Configuration
 public class H2Configuration {
 
+    @Bean
+    public DataSource dataSource() {
+//        LOG.info("Returning H2 embedded database source.");
+        return new EmbeddedDatabaseBuilder()
+                .setType(EmbeddedDatabaseType.H2)
+                .build();
+    }
+    
+    
     @Bean(name = "h2Server",
             initMethod = "start",
             destroyMethod = "stop")

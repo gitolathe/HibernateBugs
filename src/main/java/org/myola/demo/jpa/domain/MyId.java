@@ -17,12 +17,12 @@ public class MyId implements Serializable {
     private String id;
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private A1.Type type;
+    private A.Type type;
 
     public MyId() {
     }
 
-    public MyId(String id, A1.Type type) {
+    public MyId(String id, A.Type type) {
         this.id = id;
         this.type = type;
     }
@@ -35,11 +35,11 @@ public class MyId implements Serializable {
         this.id = id;
     }
 
-    public A1.Type getType() {
+    public A.Type getType() {
         return type;
     }
 
-    public void setType(A1.Type type) {
+    public void setType(A.Type type) {
         this.type = type;
     }
 

@@ -10,4 +10,7 @@ and open the template in the editor.
     <include resource="org/springframework/boot/logging/logback/base.xml"/>  
 
     <logger name="org.hibernate" level="DEBUG"/>
+    <root level="debug">
+        <appender-ref ref="STDOUT" />
+    </root>
 </configuration>

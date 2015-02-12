@@ -14,15 +14,16 @@ import javax.persistence.Table;
  * @author Ola Theander <ola.theander@myola.se>
  */
 @Entity
-@Table(name = "A1")
+@Table(name = "A")
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(name = "Type")
-public abstract class A1 implements Serializable {
+public abstract class A implements Serializable {
 
     public enum Type {
 
         A,
-        B
+        B,
+        C
     }
 
     @EmbeddedId
@@ -30,10 +31,10 @@ public abstract class A1 implements Serializable {
     @Column(nullable = false, length = 255)
     private String someText;
 
-    public A1() {
+    public A() {
     }
 
-    public A1(MyId myId, String someText) {
+    public A(MyId myId, String someText) {
         this.myId = myId;
         this.someText = someText;
     }

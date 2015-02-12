@@ -10,16 +10,16 @@ import javax.persistence.Table;
  * @author Ola Theander <ola.theander@nasdaqomx.com>
  */
 @Entity
-@Table(name = "B2")
-@DiscriminatorValue("B")
-public class B2
-        extends A1
+@Table(name = "C")
+@DiscriminatorValue("C")
+public class C
+        extends A
         implements Serializable {
 
-    public B2() {
+    public C() {
     }
 
-    public B2(MyId myId, String someText) {
+    public C(MyId myId, String someText) {
         super(myId, someText);
     }
 }

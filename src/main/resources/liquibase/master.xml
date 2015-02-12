@@ -7,9 +7,9 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-    <changeSet id="theSchema" logicalFilePath="master.xml" author="olth">
+    <changeSet id="theSchemaA" logicalFilePath="master.xml" author="olth">
 
-        <createTable tableName="A1">
+        <createTable tableName="A">
             <column name="ID" type="varchar(100)">
                 <constraints nullable="false" />
             </column>
@@ -22,10 +22,10 @@
         </createTable>
 
         <addPrimaryKey columnNames="ID, Type"
-                       constraintName="PK_A1_ID_TYPE"
-                       tableName="A1" />
+                       constraintName="PK_A_ID_TYPE"
+                       tableName="A" />
    
-        <createTable tableName="A2">
+        <createTable tableName="B">
             <column name="ID" type="varchar(100)">
                 <constraints nullable="false"/>
             </column>
@@ -35,16 +35,16 @@
         </createTable>
 
         <addPrimaryKey columnNames="ID, Type"
-                       constraintName="PK_A2_BRIDGEID_TYPE"
-                       tableName="A2" />
+                       constraintName="PK_B_BRIDGEID_TYPE"
+                       tableName="B" />
 
         <addForeignKeyConstraint baseColumnNames="ID, Type"
-                                 baseTableName="A2"
-                                 constraintName="FK_A2_A1_ID_TYPE"
+                                 baseTableName="B"
+                                 constraintName="FK_B_A_ID_TYPE"
                                  referencedColumnNames="ID, Type"
-                                 referencedTableName="A1"/>
+                                 referencedTableName="A"/>
 
-        <createTable tableName="B2">
+        <createTable tableName="C">
             <column name="ID" type="varchar(100)">
                 <constraints nullable="false"/>
             </column>
@@ -54,35 +54,100 @@
         </createTable>
 
         <addPrimaryKey columnNames="ID, Type"
-                       constraintName="PK_B2_BRIDGEID_TYPE"
-                       tableName="B2" />
+                       constraintName="PK_C_BRIDGEID_TYPE"
+                       tableName="C" />
 
         <addForeignKeyConstraint baseColumnNames="ID, Type"
-                                 baseTableName="B2"
-                                 constraintName="FK_B2_A1_ID_TYPE"
+                                 baseTableName="C"
+                                 constraintName="FK_C_A_ID_TYPE"
                                  referencedColumnNames="ID, Type"
-                                 referencedTableName="A1"/>
+                                 referencedTableName="A"/>
     </changeSet>
     
     <changeSet id="someData" logicalFilePath="master.xml" author="olth">
         <sql endDelimiter=";\n">
             <comment>First</comment>
 
-            INSERT INTO A1 ( ID, Type, SomeText )
-            VALUES('First', 'A', 'This is the first instance, type A2.');
+            INSERT INTO A ( ID, Type, SomeText )
+            VALUES('First', 'B', 'This is the first instance, type B.');
 
-            INSERT INTO A2 ( ID, Type )
-            VALUES('First', 'A');
+            INSERT INTO B ( ID, Type )
+            VALUES('First', 'B');
         </sql>
         <sql endDelimiter=";\n">
             <comment>Second</comment>
 
-            INSERT INTO A1 ( ID, Type, SomeText )
-            VALUES('Second', 'B', 'This is the second instance, type B2.');
+            INSERT INTO A ( ID, Type, SomeText )
+            VALUES('Second', 'C', 'This is the second instance, type C.');
 
-            INSERT INTO B2 ( ID, Type )
-            VALUES('Second', 'B');
+            INSERT INTO C ( ID, Type )
+            VALUES('Second', 'C');
         </sql>
     </changeSet>
+    
+    <changeSet id="theSchemaD" logicalFilePath="master.xml" author="olth">
+        <createTable tableName="D">
+            <column name="ID" type="varchar(100)">
+                <constraints primaryKey="true"
+                             nullable="false"
+                             primaryKeyName="PK_D_ID"/>
+            </column>
+            <column name="Descriminator" type="char(1)" >
+                <constraints nullable="false" />
+            </column>
+            <column name="Type" type="char(1)" >
+                <constraints nullable="false" />
+            </column>
+            <column name="SomeText" type="varchar(255)" >
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+
+        <createTable tableName="E">
+            <column name="ID" type="varchar(100)">
+                <constraints primaryKey="true"
+                             nullable="false"
+                             primaryKeyName="PK_E_ID"
+                             referencedTableName="D"
+                             referencedColumnNames="ID"
+                             foreignKeyName="FK_E_D_ID" />
+            </column>
+            <column name="Descriminator" type="char(1)" >
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+
+        <createTable tableName="F">
+            <column name="ID" type="varchar(100)">
+                <constraints primaryKey="true"
+                             nullable="false"
+                             primaryKeyName="PK_F_ID"
+                             referencedTableName="E"
+                             referencedColumnNames="ID"
+                             foreignKeyName="FK_F_E_ID" />
+            </column>
+        </createTable>
+    </changeSet>
+    
+    <changeSet id="someData2" logicalFilePath="master.xml" author="olth">
+        <sql endDelimiter=";\n">
+            INSERT INTO D ( ID, Descriminator, Type, SomeText )
+            VALUES('First', 'F', 'F', 'This is the first instance, type F.');
+
+            INSERT INTO E ( ID, Descriminator )
+            VALUES('First', 'F');
+
+            INSERT INTO F ( ID )
+            VALUES('First');
+        </sql>
+        <sql endDelimiter=";\n">
+            INSERT INTO D ( ID, Descriminator, Type, SomeText )
+            VALUES('Third', 'E', 'E', 'This is the third instance, type E.');
+
+            INSERT INTO E ( ID, Descriminator )
+            VALUES('Third', 'E');
+        </sql>
+    </changeSet>
+    
 </databaseChangeLog>
 
