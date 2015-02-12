@@ -2,8 +2,8 @@ package org.myola.demo.jpa.domain;
 
 import java.io.Serializable;
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.DiscriminatorColumn;
-import javax.persistence.DiscriminatorType;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -36,11 +36,12 @@ public class D implements Serializable {
     @Id
     @Column(nullable = false, length = 100)
     private String id;
-    
+
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
+    @Convert(converter = TypeEnumConverter.class)
     private Type type;
-    
+
     @Column(nullable = false, length = 255)
     private String someText;
 
